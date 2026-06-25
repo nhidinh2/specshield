@@ -222,10 +222,9 @@ def load_live_scenarios(suite_names=None, translate=False, max_per_suite=None) -
                                 claims=dict(claims), text=text)
                 out.append(Scenario(rec["id"], f'{sname}/{rec["category"]}', lang,
                                     state, action, rec["should_block"], note=text[:60]))
-    if skipped:
-        print(f"  (note: {skipped} pure-read tasks skipped -- no consequential action to authorize)")
-    print("  (note: benign actions are tagged user-approved; injected actions are not. "
-          "Assumes a provenance signal distinguishing user-requested from injected actions.)")
+    skip_note = f"{skipped} pure-read tasks skipped; " if skipped else ""
+    print(f"  ({skip_note}benign actions tagged user-approved, injected ones not "
+          "-- assumes a user-vs-injected provenance signal.)")
     if translate and backend is not None and not hasattr(backend, "translate"):
-        print("  (note: offline judge can't translate; VI bodies == EN. Set ANTHROPIC_API_KEY for real VI.)")
+        print("  (offline judge can't translate; VI bodies == EN. Set ANTHROPIC_API_KEY for real VI.)")
     return out
