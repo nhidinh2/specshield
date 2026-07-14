@@ -5,6 +5,8 @@ action's text (like an LLM monitor), SpecShield authorizes each proposed tool ca
 from *typed fields, dataflow taint, and the provenance of any "approval"* — making it
 language-agnostic, auditable, and free of per-action model cost.
 
+📄 **Paper:** [SpecShield: A Structural Trusted Monitor for Tool-Using AI Agents](./specshield.pdf)
+
 ## The idea
 
 Most AI safety moderates what a model *says*. SpecShield governs what an agent *does*.
@@ -45,6 +47,10 @@ python3 -m specshield demo       # one injection, English vs Vietnamese
 python3 -m specshield agentdojo  # leak / false-block across suites (EN + VI)
 python3 -m specshield control    # safety/usefulness Pareto + adaptive attacker
 python3 -m specshield attacker   # attacker-effort frontier
+python3 -m specshield provenance # two-axis provenance-corruption curve (random
+                                 # vs targeted) with cluster-bootstrap CIs
+python3 -m specshield multistep  # taint propagation across a trajectory
+python3 -m specshield semantic   # disjoint failure: text-only attacks
 python3 -m specshield redteam    # known limits
 ```
 
@@ -64,12 +70,15 @@ python3 -m specshield agentdojo --live --translate
 |---|---|
 | `core.py` | typed action model and policy engine |
 | `monitors.py` | structural, LLM, hybrid, and gated monitors |
+| `trajectory.py` | multi-step taint propagation across a trajectory |
 | `benchmarks.py` | evaluation harness |
 | `cli.py` | command-line entry points |
 | `*.jsonl` | bundled sample / scenario data |
 
 ## Status
 
-Research prototype. Single-step action authorization in the email / spreadsheet /
-banking / slack / travel suites. Multi-step taint propagation and a real (noisy)
-provenance tracker are open work.
+Research prototype in the email / spreadsheet / banking / slack / travel suites.
+Single-step authorization plus a multi-step taint tracker (`trajectory.py`,
+`multistep`). Provenance is corrupted synthetically (`provenance`); a real
+(noisy) end-to-end provenance tracker, correlated-error models, and closing the
+allow-listed-alias laundering path are open work.
